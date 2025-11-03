@@ -32,18 +32,18 @@ def full_export(filename = "game_ratings.txt"):
         print(f"Failed to export data due to error: {e}")
     else:
         print(f"Exported current game rating log to {filename}")
-        
-def simple_export(filename = "simple_game_ratings.txt"):
-    '''Exports just the name and rating pairs for each game in rating log'''
-    try:
-        with open(filename, 'w', encoding="utf-8") as file:
-            for game in game_list.values():
-                simp = game.simple_game_info()
-                file.write(f"{simp[0]}: {simp[1]}\n")
-    except Exception as e:
-        print(f"Failed to export data due to error: {e}")
-    else:
-        print(f"Exported current game rating log to {filename}")
+#         COMMENTED OUT SIMPLE EXPORT, MAY NOT NEED FOR MY OWN USE
+# def simple_export(filename = "simple_game_ratings.txt"):
+#     '''Exports just the name and rating pairs for each game in rating log'''
+#     try:
+#         with open(filename, 'w', encoding="utf-8") as file:
+#             for game in game_list.values():
+#                 simp = game.simple_game_info()
+#                 file.write(f"{simp[0]}: {simp[1]}\n")
+#     except Exception as e:
+#         print(f"Failed to export data due to error: {e}")
+#     else:
+#         print(f"Exported current game rating log to {filename}")
 
 def sort_by_rating():
     '''Returns the sorted list of games using the ratings'''
@@ -147,13 +147,11 @@ if __name__ == "__main__":
         elif user_input == "8":
             #Ask user how they would like to export the data and call
             #corresponding method
-            choice = input("Enter '1' for simple export and '2' for full export: ")
-            if choice=='1':
-                simple_export()
-            elif choice=='2':
+            confirm = input("Enter 'C' to confirm full export:")
+            if confirm.upper()=='C':
                 full_export()
             else:
-                print("Sorry, you did not select a valid export option...")
+                print("Canceling export...")
                 
         elif user_input == "9":
             #Exit the program
