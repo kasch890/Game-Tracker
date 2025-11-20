@@ -22,7 +22,7 @@ def remove_game(game_name):
     del game_list[game_name]
     
     
-def full_export(filename = "game_ratings.txt"):
+def full_export_txt(filename = "game_ratings.txt"):
     '''Exports *all* of the game rating log data into a .txt file in 
     a readable format'''
     try:    
@@ -46,19 +46,6 @@ def full_export_json(filename = "game_ratings.json"):
     with open(filename, 'w', encoding="utf-8") as f:
         json.dump(data, f, indent=4)
     print(f"Exported current game rating log to {filename}")
-
-#         COMMENTED OUT SIMPLE EXPORT, MAY NOT NEED FOR MY OWN USE
-# def simple_export(filename = "simple_game_ratings.txt"):
-#     '''Exports just the name and rating pairs for each game in rating log'''
-#     try:
-#         with open(filename, 'w', encoding="utf-8") as file:
-#             for game in game_list.values():
-#                 simp = game.simple_game_info()
-#                 file.write(f"{simp[0]}: {simp[1]}\n")
-#     except Exception as e:
-#         print(f"Failed to export data due to error: {e}")
-#     else:
-#         print(f"Exported current game rating log to {filename}")
 
 def full_import_json(filename="game_ratings.json"):
     global game_list, game_name_set
@@ -99,16 +86,14 @@ if __name__ == "__main__":
     while not finished:
         print("~ "*24 )
         user_input = input('''What would you like to do?\n
-               - "Add" game
-               - "Remove" game
-               - "Update" existing game
-               - "Comment" addition to existing game
-               - "View list" of game names
-               - "View game"
-               - "View all games"
-               - "Export" game log data
-               - "Import" game log data
-               - "Exit Program" \n
+               [add]    -   Add game 
+               [remove] -   Remove game
+               [edit]   -   Edit existing game
+               [vg]     -   View game
+               [vl]     -   View list of games
+               [export] -   Export game log data
+               [import] -   Import game log data
+               [exit]- "Exit Program" \n
               Input command here: 
               ''')
 
