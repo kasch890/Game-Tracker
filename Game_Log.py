@@ -142,7 +142,7 @@ if __name__ == "__main__":
             else: print(f"The game {key_to_check} "
                         "does not exist in your rating log...")
             
-        elif user_input == "add comment":
+        elif user_input == "comment":
             game_to_check = input("What game would you like to add a"
                                   " comment to?:")
             if game_exists(game_to_check):
