@@ -6,6 +6,7 @@ Created on Thu Aug 14 18:25:30 2025
 """
 from Game import *
 import os
+import json
 
 game_list = {}
 game_name_set = set()
@@ -32,6 +33,20 @@ def full_export(filename = "game_ratings.txt"):
         print(f"Failed to export data due to error: {e}")
     else:
         print(f"Exported current game rating log to {filename}")
+
+def full_export_json(filename = "game_ratings.json"):
+    data = {}
+    for name, game in game_list.items():
+            data[name] = {
+                "name": game._name,
+                "rating": game.rating,
+                "console": game.console,
+                "comments": game.comments
+            }
+    with open(filename, 'w', encoding="utf-8") as f:
+        json.dump(data, f, indent=4)
+    print(f"Exported current game rating log to {filename}")
+
 #         COMMENTED OUT SIMPLE EXPORT, MAY NOT NEED FOR MY OWN USE
 # def simple_export(filename = "simple_game_ratings.txt"):
 #     '''Exports just the name and rating pairs for each game in rating log'''
@@ -44,6 +59,27 @@ def full_export(filename = "game_ratings.txt"):
 #         print(f"Failed to export data due to error: {e}")
 #     else:
 #         print(f"Exported current game rating log to {filename}")
+
+def full_import_json(filename="game_ratings.json"):
+    global game_list, game_name_set
+    try:
+        with open(filename, "r", encoding="utf-8") as f:
+            data = json.load(f)
+            game_list.clear()
+            game_name_set.clear()
+            for game_data in data.values():
+                g = Game(
+                    name=game_data["name"],
+                    rating=game_data["rating"],
+                    console=game_data["console"]
+                )
+                g.comments = game_data["comments"]
+                add_game(g)
+    except Exception as e:
+        print(f"Failed to import data due to error: {e}")
+    else:
+        print(f"Imported {len(game_list)} games from {filename}")
+
 
 def sort_by_rating():
     '''Returns the sorted list of games using the ratings'''
@@ -71,6 +107,7 @@ if __name__ == "__main__":
                - "View game"
                - "View all games"
                - "Export" game log data
+               - "Import" game log data
                - "Exit Program" \n
               Input command here: 
               ''')
@@ -151,9 +188,11 @@ if __name__ == "__main__":
             #corresponding method
             confirm = input("Enter 'C' to confirm full export:")
             if confirm.upper()=='C':
-                full_export()
+                full_export_json()
             else:
                 print("Canceling export...")
+        elif user_input == "import":
+            full_import_json()
                 
         elif user_input == "exit program":
             #Exit the program
