@@ -87,18 +87,22 @@ class Game():
         note = str(note)
         self.notes.append(note)
     
-    
-    def update_rating(self, new_rating = None):
-        '''Updates the rating of the game by taking user input and 
-        validating that input using __validate__rating()'''
-        self.rating = self.__validate__rating(new_rating)
-        print(f"Rating for {self._name} updated to {self.rating}")
-
     def update_status(self, new_status=None):
         '''Updates the status of the game through user input'''
         self.status = new_status
         print(f"Status for {self._name} updated to {self.status}")
-            
+
+    def update_console(self, new_console=None):
+        '''Updates the console of the game through user input'''
+        self.console = new_console
+        print(f"Console for {self._name} updated to {self.console}")
+
+    def update_rating(self, new_rating = None):
+        '''Updates the rating of the game by taking user input and
+        validating that input using __validate__rating()'''
+        self.rating = self.__validate__rating(new_rating)
+        print(f"Rating for {self._name} updated to {self.rating}")
+
     #private method
     def __validate__rating(self, new_rating=None):
         '''Validates the user input for a new rating by making sure it is a 

@@ -127,9 +127,11 @@ if __name__ == "__main__":
                     new_status = input(f"Enter new status for [key_to_check] : ")
                     game_list[key_to_check].update_status(new_status)
                 if update_choice == 'r':
-                    new_rating = input(f"Input your new rating for "
-                                       f"{key_to_check} here: ")
+                    new_rating = input(f"Input new rating for {key_to_check} : ")
                     game_list[key_to_check].update_rating(new_rating)
+                if update_choice == 'c':
+                    new_console = input(f"Input new console for {key_to_check} : ")
+                    game_list[key_to_check].update_console(new_console)
             else: print(f"The game {key_to_check} "
                         "does not exist in your rating log...")
             
