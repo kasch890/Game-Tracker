@@ -132,6 +132,14 @@ if __name__ == "__main__":
                 if update_choice == 'c':
                     new_console = input(f"Input new console for {key_to_check} : ")
                     game_list[key_to_check].update_console(new_console)
+                if update_choice == 'n':
+                    notes_done = False
+                    while not notes_done:
+                        note_input = input(f"Input new note for {key_to_check} or enter 'cancel' : ")
+                        if note_input == 'cancel':
+                            notes_done = True
+                        else:
+                            game_list[key_to_check].add_note(note_input)
             else: print(f"The game {key_to_check} "
                         "does not exist in your rating log...")
             
