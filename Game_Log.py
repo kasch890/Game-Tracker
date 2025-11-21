@@ -37,13 +37,13 @@ def full_export_txt(filename = "game_ratings.txt"):
 def full_export_json(filename = "game_ratings.json"):
     data = {}
     for name, game in game_list.items():
-            data[name] = {
-                "name": game._name,
-                "rating": game.rating,
-                "console": game.console,
-                "status": game.status,
-                "notes": game.notes
-            }
+        data[name] = {
+            "name": game._name,
+            "rating": game.rating,
+            "console": game.console,
+            "status": game.status,
+            "notes": game.notes
+        }
     with open(filename, 'w', encoding="utf-8") as f:
         json.dump(data, f, indent=4)
     print(f"Exported current game rating log to {filename}")
