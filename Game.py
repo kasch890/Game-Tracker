@@ -58,47 +58,13 @@ class Game():
         '''Instantiates a Game object and prompts user for the name and rating,
         adds an empty notes list attribute,
         and sets the attribute console="" '''
-        # If we are loading existing data (no user input allowed)
-        if name is not None and status is not None:
-            # Direct assignment mode
-            self._name = name
-            self.status = status
-            self.rating = rating
-            self.console = console
-            self.notes = []
-            return
 
-        #get a valid name input
-        while True:
-            try:
-                if name==None:
-                    name = input("Enter the game name: ").lower()
-                if not isinstance(name, str):
-                     raise TypeError("Name must be a string.")
-                break
-
-            except TypeError as e:
-                print(e)
-                name = None
-        #get valid status input
-        while True:
-            try:
-                if status == None:
-                    status = input("Enter the status (Played, Watched, Wishlist): ").lower()
-                if not isinstance(status, str):
-                    raise TypeError("Status must be a string.")
-                break
-
-            except TypeError as e:
-                print(e)
-                status = None
-
-        print("Game successfully created for log!")
-        self._name = name
-        self.status = status
+        self._name = name.lower()
+        self.status = status.lower()
         self.rating = rating
         self.console = console
-        self.notes = []
+        self.notes: list[str] = []
+        return
         
     
     def add_note(self,note=None):
