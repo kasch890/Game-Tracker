@@ -74,11 +74,6 @@ def full_import_json(filename="game_ratings.json"):
     else:
         print(f"Imported {len(game_dict)} games from {filename}")
 
-#old sort function
-# def sort_by_rating():
-#     '''Returns the sorted list of games using the ratings'''
-#     return sorted(game_dict, reverse=True)
-
 def sort_by_name():
     temp_dict ={}
     sorted_keys = sorted(game_dict.keys())
