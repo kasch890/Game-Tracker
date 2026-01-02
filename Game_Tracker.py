@@ -11,6 +11,11 @@ import json
 game_dict = {}
 game_name_set = set()
 
+def prompt_new_game() -> Game:
+    name = input("Enter the game name: ").lower()
+    status = input("Enter status ( playing, watched, wishlist : ").lower()
+    print("Game successfully created for log!")
+    return Game(name=name, status=status)
 
 def add_game(new_game:Game):
     '''Adds a game to the current game list'''
@@ -69,11 +74,6 @@ def full_import_json(filename="game_ratings.json"):
     else:
         print(f"Imported {len(game_dict)} games from {filename}")
 
-#old sort function
-# def sort_by_rating():
-#     '''Returns the sorted list of games using the ratings'''
-#     return sorted(game_dict, reverse=True)
-
 def sort_by_name():
     temp_dict ={}
     sorted_keys = sorted(game_dict.keys())
@@ -114,7 +114,7 @@ if __name__ == "__main__":
         
         if user_input == "add":
             #prompt for game info and add to game_dict
-            next_game = Game()
+            next_game = prompt_new_game()
             add_game(next_game)
             continue
         
