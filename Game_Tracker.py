@@ -83,12 +83,99 @@ def sort_by_name():
     game_dict.update(temp_dict)
     return game_dict
 
+def add():
+    next_game = prompt_new_game()
+    add_game(next_game)
+
+def remove():
+    key_to_check = input("What is the game "
+                         "you would like to remove?: ").lower()
+    if game_exists(key_to_check):
+        remove_game(key_to_check)
+    else:
+        print(f"The game {key_to_check} "
+              "does not exist in your rating log...")
+
+def edit():
+    # Check if game exists and update its rating, prompting
+    # user until valid input
+    key_to_check = input("What game would you "
+                         "like to edit? : ").lower()
+    if game_exists(key_to_check):
+        # Ask what they would like to update: status, rating, console, notes
+        update_choice = input(
+            "Would you like to update the [s] status, [r] rating, [c] console, or [n] notes? : ").lower()
+        if update_choice == 's':
+            new_status = input(f"Enter new status for {key_to_check} : ")
+            game_dict[key_to_check].update_status(new_status)
+        if update_choice == 'r':
+            new_rating = input(f"Input new rating for {key_to_check} : ")
+            game_dict[key_to_check].update_rating(new_rating)
+        if update_choice == 'c':
+            new_console = input(f"Input new console for {key_to_check} : ")
+            game_dict[key_to_check].update_console(new_console)
+        if update_choice == 'n':
+            notes_done = False
+            while not notes_done:
+                note_input = input(f"Input new note for {key_to_check} or enter 'cancel' : ")
+                if note_input == 'cancel':
+                    notes_done = True
+                else:
+                    game_dict[key_to_check].add_note(note_input)
+    else:
+        print(f"The game {key_to_check} "
+              "does not exist in your rating log...")
+
 
 def game_exists(game_to_check:str):
     if game_to_check in game_name_set:
         return True
     else: return False
 
+def view_game():
+    # Prints a single game review if game exists in log
+    game_to_view = input("Which game "
+                         "would you like to view? : ").lower()
+    if game_exists(game_to_view):
+        print(game_dict[game_to_view])
+    else:
+        print(f"The game {game_to_view} "
+              "does not exist in your rating log...")
+
+def view_list():
+    # Prints the list of the names of current games in log
+    sort_choice = input("Would you like to sort the list first? [y] or [n] : ").lower()
+    if sort_choice == 'y':
+        game_dict = sort_by_name()
+    view_choice = input("Would you like simple [s] or detailed [d] list? : ").lower()
+    if view_choice == 's':
+        print("Current games in log: ")
+        for key in game_dict:
+            print(f"\n {key}")
+    elif view_choice == 'd':
+        for game in game_dict:
+            print(game_dict[game])
+    else:
+        print("Sorry, you did not select a valid option...")
+
+def export():
+    # Ask user how they would like to export the data and call
+    # corresponding method
+    confirm = input("Enter 'C' to confirm full .json export:")
+    if confirm.upper() == 'C':
+        full_export_json()
+    else:
+        print("Canceling export...")
+
+commands = {
+    "add": add,
+    "remove": remove,
+    "edit": edit,
+    "vg": view_game,
+    "vl": view_list,
+    "export": export,
+    "import": full_import_json,
+}
 def run():
     # print welcome banner
     print("Welcome to your game rating log!\n")
@@ -97,7 +184,7 @@ def run():
     # Start user input loop until terminated
     while not finished:
         print("~ " * 24)
-        user_input = input('''What would you like to do?\n
+        cmd = input('''What would you like to do?\n
                [add]    -   Add game 
                [remove] -   Remove game
                [edit]   -   Edit existing game
@@ -107,106 +194,132 @@ def run():
                [import] -   Import game log data
                [exit]   -   Exit Program \n
               Input command here: 
-              ''')
-
-        user_input = user_input.lower()
-        # All non valid inputs reset the while loop
-
-        if user_input == "add":
-            # prompt for game info and add to game_dict
-            next_game = prompt_new_game()
-            add_game(next_game)
-            continue
-
-        elif user_input == "remove":
-            # Check if game exists in list and remove it if it does
-            key_to_check = input("What is the game "
-                                 "you would like to remove?: ").lower()
-            if game_exists(key_to_check):
-                remove_game(key_to_check)
-            else:
-                print(f"The game {key_to_check} "
-                      "does not exist in your rating log...")
-
-        elif user_input == "edit":
-            # Check if game exists and update its rating, prompting
-            # user until valid input
-            key_to_check = input("What game would you "
-                                 "like to edit? : ").lower()
-            if game_exists(key_to_check):
-                # Ask what they would like to update: status, rating, console, notes
-                update_choice = input(
-                    "Would you like to update the [s] status, [r] rating, [c] console, or [n] notes? : ").lower()
-                if update_choice == 's':
-                    new_status = input(f"Enter new status for {key_to_check} : ")
-                    game_dict[key_to_check].update_status(new_status)
-                if update_choice == 'r':
-                    new_rating = input(f"Input new rating for {key_to_check} : ")
-                    game_dict[key_to_check].update_rating(new_rating)
-                if update_choice == 'c':
-                    new_console = input(f"Input new console for {key_to_check} : ")
-                    game_dict[key_to_check].update_console(new_console)
-                if update_choice == 'n':
-                    notes_done = False
-                    while not notes_done:
-                        note_input = input(f"Input new note for {key_to_check} or enter 'cancel' : ")
-                        if note_input == 'cancel':
-                            notes_done = True
-                        else:
-                            game_dict[key_to_check].add_note(note_input)
-            else:
-                print(f"The game {key_to_check} "
-                      "does not exist in your rating log...")
-
-        elif user_input == "vg":
-            # Prints a single game review if game exists in log
-            game_to_view = input("Which game "
-                                 "would you like to view? : ").lower()
-            if game_exists(game_to_view):
-                print(game_dict[game_to_view])
-            else:
-                print(f"The game {game_to_view} "
-                      "does not exist in your rating log...")
-
-        elif user_input == "vl":
-            # Prints the list of the names of current games in log
-            sort_choice = input("Would you like to sort the list first? [y] or [n] : ").lower()
-            if sort_choice == 'y':
-                game_dict = sort_by_name()
-            view_choice = input("Would you like simple [s] or detailed [d] list? : ").lower()
-            if view_choice == 's':
-                print("Current games in log: ")
-                for key in game_dict:
-                    print(f"\n {key}")
-            elif view_choice == 'd':
-                for game in game_dict:
-                    print(game_dict[game])
-            else:
-                print("Sorry, you did not select a valid option...")
-
-        elif user_input == "export":
-            # Ask user how they would like to export the data and call
-            # corresponding method
-            confirm = input("Enter 'C' to confirm full .json export:")
-            if confirm.upper() == 'C':
-                full_export_json()
-            else:
-                print("Canceling export...")
-        elif user_input == "import":
-            full_import_json()
-
-        elif user_input == "exit program":
-            # Exit the program
-            confirm = input("Enter 'C' to confirm program exit:")
-            if confirm.upper() == 'C':
+              ''').strip().lower()
+        if cmd == "exit":
+            confirm = input("Enter 'C' to confirm program exit:").lower()
+            if confirm == 'c':
                 finished = True
                 print("***Program Terminated***")
-
             else:
                 print("Canceling exit...")
-
+        action = commands.get(cmd);
+        if action:
+            action()
         else:
             print("Invalid option. Please try again.")
+
+        #
+        #
+        # user_input = input('''What would you like to do?\n
+        #        [add]    -   Add game
+        #        [remove] -   Remove game
+        #        [edit]   -   Edit existing game
+        #        [vg]     -   View game
+        #        [vl]     -   View list of games
+        #        [export] -   Export game log data
+        #        [import] -   Import game log data
+        #        [exit]   -   Exit Program \n
+        #       Input command here:
+        #       ''')
+        #
+        # user_input = user_input.lower()
+        # # All non valid inputs reset the while loop
+        #
+        # # if user_input == "add":
+        # #     # prompt for game info and add to game_dict
+        # #     next_game = prompt_new_game()
+        # #     add_game(next_game)
+        # #     continue
+        #
+        # # elif user_input == "remove":
+        # #     # Check if game exists in list and remove it if it does
+        # #     key_to_check = input("What is the game "
+        # #                          "you would like to remove?: ").lower()
+        # #     if game_exists(key_to_check):
+        # #         remove_game(key_to_check)
+        # #     else:
+        # #         print(f"The game {key_to_check} "
+        # #               "does not exist in your rating log...")
+        #
+        # # elif user_input == "edit":
+        # #     # Check if game exists and update its rating, prompting
+        # #     # user until valid input
+        # #     key_to_check = input("What game would you "
+        # #                          "like to edit? : ").lower()
+        # #     if game_exists(key_to_check):
+        # #         # Ask what they would like to update: status, rating, console, notes
+        # #         update_choice = input(
+        # #             "Would you like to update the [s] status, [r] rating, [c] console, or [n] notes? : ").lower()
+        # #         if update_choice == 's':
+        # #             new_status = input(f"Enter new status for {key_to_check} : ")
+        # #             game_dict[key_to_check].update_status(new_status)
+        # #         if update_choice == 'r':
+        # #             new_rating = input(f"Input new rating for {key_to_check} : ")
+        # #             game_dict[key_to_check].update_rating(new_rating)
+        # #         if update_choice == 'c':
+        # #             new_console = input(f"Input new console for {key_to_check} : ")
+        # #             game_dict[key_to_check].update_console(new_console)
+        # #         if update_choice == 'n':
+        # #             notes_done = False
+        # #             while not notes_done:
+        # #                 note_input = input(f"Input new note for {key_to_check} or enter 'cancel' : ")
+        # #                 if note_input == 'cancel':
+        # #                     notes_done = True
+        # #                 else:
+        # #                     game_dict[key_to_check].add_note(note_input)
+        # #     else:
+        # #         print(f"The game {key_to_check} "
+        # #               "does not exist in your rating log...")
+        #
+        # # elif user_input == "vg":
+        # #     # Prints a single game review if game exists in log
+        # #     game_to_view = input("Which game "
+        # #                          "would you like to view? : ").lower()
+        # #     if game_exists(game_to_view):
+        # #         print(game_dict[game_to_view])
+        # #     else:
+        # #         print(f"The game {game_to_view} "
+        # #               "does not exist in your rating log...")
+        #
+        # # elif user_input == "vl":
+        # #     # Prints the list of the names of current games in log
+        # #     sort_choice = input("Would you like to sort the list first? [y] or [n] : ").lower()
+        # #     if sort_choice == 'y':
+        # #         game_dict = sort_by_name()
+        # #     view_choice = input("Would you like simple [s] or detailed [d] list? : ").lower()
+        # #     if view_choice == 's':
+        # #         print("Current games in log: ")
+        # #         for key in game_dict:
+        # #             print(f"\n {key}")
+        # #     elif view_choice == 'd':
+        # #         for game in game_dict:
+        # #             print(game_dict[game])
+        # #     else:
+        # #         print("Sorry, you did not select a valid option...")
+        #
+        # # elif user_input == "export":
+        # #     # Ask user how they would like to export the data and call
+        # #     # corresponding method
+        # #     confirm = input("Enter 'C' to confirm full .json export:")
+        # #     if confirm.upper() == 'C':
+        # #         full_export_json()
+        # #     else:
+        # #         print("Canceling export...")
+        # # elif user_input == "import":
+        # #     full_import_json()
+        # #
+        # # elif user_input == "exit program":
+        # #     # Exit the program
+        # #     confirm = input("Enter 'C' to confirm program exit:")
+        # #     if confirm.upper() == 'C':
+        # #         finished = True
+        # #         print("***Program Terminated***")
+        # #
+        # #     else:
+        # #         print("Canceling exit...")
+        #
+        # else:
+        #     print("Invalid option. Please try again.")
 if __name__ == "__main__":
     run()
         
